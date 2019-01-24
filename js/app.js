@@ -1,62 +1,80 @@
-// Enemies our player must avoid
+// Enemy class
 var Enemy = function(x, y, speed) {
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
-
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
-    // Enemy initial location
     this.x = x;
     this.y = y;
-    // Enemy speed
     this.speed = speed;
 };
 
-// Update the enemy's position, required method for game
+// Updates the enemy's position.
 // Parameter: dt, a time delta between ticks
-// Handles collision with player.
-// Check if boundary of game board has been reached.
-// If boundary has been reached, reset to initial position.
+// If boundary has been reached (in x axis), resets to position outside of playing area.
 Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
     this.x += this.speed * dt;
+    if (this.x > 500) {
+    	this.x = -100;
+    }
 };
 
-// Draw the enemy on the screen, required method for game
+// Draws the enemy on the screen
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
-
-// Hero's initial coordinates.
-// image/sprite for hero.
+// Hero class
 var Hero = function(x, y) {
 		this.x = x;
 		this.y = y;
 		this.sprite = 'images/char-cat-girl.png';
 }
 
-// render method - same as enemy.
+// Render method - same as enemy.
 Hero.prototype.render = function() {
 	ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-// update method - similar to one for enemy.
-// check collision method needed - compare x and y coordinates.
-// have they reached winning coordinates?
+// Update method - similar to one for enemy.
+// Checks if player has collided with enemy.
+// Enemy is put in bounding box, and function checks whether the player's coordinates
+// are located within this box.
+var score = 0;
+var gameScore = document.querySelector('.score');
 Hero.prototype.update = function(dt) {
+	for (var enemy of allEnemies) {
+		if (this.y === enemy.y){
+			if(enemy.x + 65 > this.x && enemy.x - 65 <= this.x) {
+				player.resetPlayer();
+				score = score - 50;
+			}
+		}
+		//If the player reaches the water, call 'win' function.
+		if (this.y <=0) {
+			player.win();
+		}
+	}
+	// Updates score text at top of window to reflect number of points won/lost.
+	gameScore.textContent = score + " Points";
+}
 
+// Returns player to initial coordinates.
+Hero.prototype.resetPlayer = function() {
+	this.x = 201;
+	this.y = 410;
+}
+
+// Returns player to initial coordinates using resetPlayer method.
+// Adds 100 points onto score.
+Hero.prototype.win = function() {
+	player.resetPlayer();
+	score = score + 100;	
 }
 
 // handleInput method - receives user input (allowedKeys), 
-// moves player according to input.
-// reset player method - moves player back to initial coordinates (can be separate method).
+// Player "jumps" around playing area according to input.
+// Inequalities are such that player cannot travel outside of the playing area.
 // https://www.kirupa.com/canvas/moving_shapes_canvas_keyboard.htm
 Hero.prototype.handleInput = function(keypress) {
 	switch(keypress) {
@@ -84,17 +102,15 @@ Hero.prototype.handleInput = function(keypress) {
 	player.render();
 }
 
-// Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
-// Place the player object in a variable called player
+// Objects are instantiated with their initial coordinates and speed (in the case of enemies).
 const player = new Hero(201, 410);
 const allEnemies = [];
 
-const enemy1 = new Enemy(0, 60, 200);
-const enemy2 = new Enemy(0, 145, 200);
-const enemy3 = new Enemy(0, 225, 200);
-allEnemies.push(enemy1, enemy2, enemy3);
-
+const enemy1 = new Enemy(-150, 50, 100);
+const enemy2 = new Enemy(-100, 140, 150);
+const enemy3 = new Enemy(-120, 230, 120);
+const enemy4 = new Enemy(-20, 50, 100);
+allEnemies.push(enemy1, enemy2, enemy3, enemy4);
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
