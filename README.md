@@ -1,8 +1,8 @@
 # arcade-game
 
-##Arcade Game for Udacity Front-End Developer Nanodegree
+## Arcade Game for Udacity Front-End Developer Nanodegree
 
-###About the game:
+### About the game:
 
 * Run the game by loading the index.html file.
 * Game will start immediately.
@@ -12,6 +12,6 @@
 * If the player hits an enemy, they will lose 50 points.
 * If the player reaches the water or hits an enemy, their character will automatically reset to its original position.
 
-###References:
+### References:
 
 * Moving the player using the arrow keys https://www.kirupa.com/canvas/moving_shapes_canvas_keyboard.htm
