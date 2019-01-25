@@ -6,16 +6,18 @@ var Enemy = function(x, y, speed) {
     this.speed = speed;
 };
 
-// Updates the enemy's position.
-// Parameter: dt, a time delta between ticks
-// If boundary has been reached (in x axis), resets to position outside of playing area.
+/* Updates the enemy's position.
+Parameter: dt, a time delta between ticks
+If boundary has been reached (in x axis), resets to position outside of playing area.*/
 Enemy.prototype.update = function(dt) {
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
+    /* You should multiply any movement by the dt parameter
+    which will ensure the game runs at the same speed for
+    all computers. */
+    var boundary = 500;
+    var startPosition = -100;
     this.x += this.speed * dt;
-    if (this.x > 500) {
-    	this.x = -100;
+    if (this.x > boundary) {
+    	this.x = startPosition;
     }
 };
 
@@ -25,6 +27,7 @@ Enemy.prototype.render = function() {
 };
 
 // Hero class
+// To do: Use inheritance to "borrow" variables from enemy class.
 var Hero = function(x, y) {
 		this.x = x;
 		this.y = y;
@@ -32,27 +35,28 @@ var Hero = function(x, y) {
 }
 
 // Render method - same as enemy.
+// To do: Use inheritance to "borrow" method from enemy method.
 Hero.prototype.render = function() {
 	ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-// Update method - similar to one for enemy.
-// Checks if player has collided with enemy.
-// Enemy is put in bounding box, and function checks whether the player's coordinates
-// are located within this box.
+/* Update method - similar to one for enemy.
+Checks if player has collided with enemy.
+Enemy is put in bounding box, and function checks whether the player's coordinates
+are located within this box. */
 var score = 0;
 var gameScore = document.querySelector('.score');
 Hero.prototype.update = function(dt) {
 	for (var enemy of allEnemies) {
 		if (this.y === enemy.y){
 			if(enemy.x + 65 > this.x && enemy.x - 65 <= this.x) {
-				player.resetPlayer();
+				this.resetPlayer();
 				score = score - 50;
 			}
 		}
 		//If the player reaches the water, call 'win' function.
 		if (this.y <=0) {
-			player.win();
+			this.win();
 		}
 	}
 	// Updates score text at top of window to reflect number of points won/lost.
@@ -65,17 +69,17 @@ Hero.prototype.resetPlayer = function() {
 	this.y = 410;
 }
 
-// Returns player to initial coordinates using resetPlayer method.
-// Adds 100 points onto score.
+/* Returns player to initial coordinates using resetPlayer method.
+Adds 100 points onto score. */
 Hero.prototype.win = function() {
-	player.resetPlayer();
+	this.resetPlayer();
 	score = score + 100;	
 }
 
-// handleInput method - receives user input (allowedKeys), 
-// Player "jumps" around playing area according to input.
-// Inequalities are such that player cannot travel outside of the playing area.
-// https://www.kirupa.com/canvas/moving_shapes_canvas_keyboard.htm
+/* handleInput method - receives user input (allowedKeys), 
+Player "jumps" around playing area according to input.
+Inequalities are such that player cannot travel outside of the playing area.
+https://www.kirupa.com/canvas/moving_shapes_canvas_keyboard.htm */
 Hero.prototype.handleInput = function(keypress) {
 	switch(keypress) {
 		case 'left':
@@ -112,8 +116,8 @@ const enemy3 = new Enemy(-120, 230, 120);
 const enemy4 = new Enemy(-20, 50, 100);
 allEnemies.push(enemy1, enemy2, enemy3, enemy4);
 
-// This listens for key presses and sends the keys to your
-// Player.handleInput() method. You don't need to modify this.
+/* This listens for key presses and sends the keys to your
+Player.handleInput() method. You don't need to modify this. */
 document.addEventListener('keyup', function(e) {
     var allowedKeys = {
         37: 'left',
