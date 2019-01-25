@@ -4,7 +4,7 @@
 
 ### About the game:
 
-* Run the game by loading the index.html file.
+* Run the game by loading the index.html file or by visiting the site https://zoebrooking.github.io/arcade-game/.
 * Game will start immediately.
 * Move the player using the arrow keys on the keyboard.
 * The aim of the game is to reach the water without colliding with any enemies.
