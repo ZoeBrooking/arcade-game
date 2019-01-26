@@ -103,7 +103,7 @@ Hero.prototype.handleInput = function(keypress) {
 			}
 			break;
 	}
-	player.render();
+	this.render();
 }
 
 // Objects are instantiated with their initial coordinates and speed (in the case of enemies).
